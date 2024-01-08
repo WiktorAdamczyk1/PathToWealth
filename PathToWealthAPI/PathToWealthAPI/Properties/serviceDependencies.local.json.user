@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "restored": true,
+      "restoreTime": "2024-01-08T22:00:15.1786494Z"
+    },
+    "secrets1": {
+      "restored": true,
+      "restoreTime": "2024-01-08T21:59:35.1603519Z"
+    }
+  },
+  "parameters": {
+    "mssql1.subscriptionId": {
+      "Name": "mssql1.subscriptionId",
+      "Type": "subscription",
+      "Value": "48efb361-5cd6-4be2-9a29-d37dd48a98a5"
+    },
+    "mssql1.resourceGroupName": {
+      "Name": "mssql1.resourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "rgPathToWealth"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+@PathToWealthAPI_HostAddress = http://localhost:5197
+
+GET {{PathToWealthAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
