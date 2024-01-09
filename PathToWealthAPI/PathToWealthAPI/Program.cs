@@ -1,8 +1,13 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using PathToWealthAPI;
 using PathToWealthAPI.Data;
+using PathToWealthAPI.Extensions;
+using PathToWealthAPI.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -35,6 +40,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
+builder.Services.AddFluentValidationServices();
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IRegistrationService, RegistrationService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -46,53 +59,47 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapPost("/login", async (ApplicationDbContext db, Models.UserLogin userLogin, IPasswordHasher<User> passwordHasher) =>
+app.MapPost("/login", async (ApplicationDbContext db, Models.UserLogin userLogin, IPasswordHasher<User> passwordHasher, IUserService userService, ITokenService tokenService) =>
 {
-    // This should be a method that checks the user's credentials
-    var user = await db.User.FirstOrDefaultAsync(u => u.Username == userLogin.Username);
+    User user = await userService.GetUser(userLogin.UsernameOrEmail);
 
-    if (user == null)
+    if (user == null || !userService.VerifyPassword(user, userLogin.Password, passwordHasher))
         return Results.Unauthorized();
 
-    // Verify the provided password with the stored hashed password
-    var verificationResult = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, userLogin.Password);
-
-    if (verificationResult == PasswordVerificationResult.Failed)
-        return Results.Unauthorized();
-
-    var tokenHandler = new JwtSecurityTokenHandler();
-    var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
-    var tokenDescriptor = new SecurityTokenDescriptor
-    {
-        Subject = new ClaimsIdentity(new Claim[]
-        {
-            new Claim(ClaimTypes.Name, user.Username.ToString())
-            // Add other claims as needed
-        }),
-        Expires = DateTime.UtcNow.AddDays(7),
-        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-    };
-    var token = tokenHandler.CreateToken(tokenDescriptor);
-    return Results.Ok(new { token = tokenHandler.WriteToken(token) });
+    var token = tokenService.GenerateToken(user);
+    return Results.Ok(new { token });
 }).WithName("Login")
 .WithOpenApi();
 
 
-app.MapPost("/register", async (ApplicationDbContext db, User user, IPasswordHasher<User> passwordHasher) =>
+app.MapPost("/register", async (UserRegistration registration, IPasswordHasher<User> passwordHasher, IValidator<UserRegistration> validator, IRegistrationService registrationService) =>
 {
-    // Check if a user with the same username already exists
-    var existingUser = await db.User.FirstOrDefaultAsync(u => u.Username == user.Username);
-    if (existingUser != null)
-        return Results.Conflict("Username already exists");
+    // Validate the registration model
+    var validationResult = validator.Validate(registration);
+    if (!validationResult.IsValid)
+    {
+        return Results.ValidationProblem(validationResult.ToDictionary());
+    }
 
-    // Hash the password before storing it
-    user.PasswordHash = passwordHasher.HashPassword(user, user.PasswordHash);
+    try
+    {
+        // Register the user
+        var user = await registrationService.RegisterUser(registration, passwordHasher);
 
-    // Add the new user to the database
-    db.User.Add(user);
-    await db.SaveChangesAsync();
+        // Exclude the password information from the response
+        var responseUser = new
+        {
+            user.UserId,
+            user.Username,
+            user.Email
+        };
 
-    return Results.Created($"/user/{user.UserId}", user);
+        return Results.Created($"/user/{user.UserId}", responseUser);
+    }
+    catch (Exception ex)
+    {
+        return Results.Conflict(ex.Message);
+    }
 }).WithName("Register");
 
 

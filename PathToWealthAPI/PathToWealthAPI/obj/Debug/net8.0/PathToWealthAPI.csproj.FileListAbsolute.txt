@@ -136,3 +136,6 @@ C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\obj\Deb
 C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\obj\Debug\net8.0\PathToWealthAPI.genruntimeconfig.cache
 C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\obj\Debug\net8.0\ref\PathToWealthAPI.dll
 C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\bin\Debug\net8.0\FluentValidation.dll
+C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\bin\Debug\net8.0\FluentValidation.AspNetCore.dll
+C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\bin\Debug\net8.0\FluentValidation.DependencyInjectionExtensions.dll

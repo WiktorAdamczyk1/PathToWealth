@@ -9,11 +9,8 @@ namespace PathToWealthAPI.Data
         {
             [Key]
             public int UserId { get; set; }
-            [Required]
             public string Username { get; set; }
-            [Required]
             public string PasswordHash { get; set; }
-            [Required]
             public string Email { get; set; }
         }
 
@@ -22,9 +19,7 @@ namespace PathToWealthAPI.Data
             [Key]
             public int TokenId { get; set; }
             public int UserId { get; set; }
-            [Required]
             public string Token { get; set; }
-            [Required]
             public DateTime ExpiryDate { get; set; }
         }
 
@@ -49,9 +44,18 @@ namespace PathToWealthAPI.Data
 
         public class UserLogin
         {
-            public string Username { get; set; }
+            public string UsernameOrEmail { get; set; }
             public string Password { get; set; }
         }
+
+        public class UserRegistration
+        {
+            public string Username { get; set; }
+            public string Email { get; set; }
+            public string Password { get; set; }
+            public string PasswordConfirmation { get; set; }
+        }
+
 
     }
 }

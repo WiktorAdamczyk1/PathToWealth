@@ -1,11 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "BdN0atvelwn9CcCiWyXcTeDyKYCfqK3BwFbQMrxh98tRTwOUe5J/ww/9kod0Pk18LIIde3KCvRgBPzRnXAOdIw==",
+  "dgSpecHash": "/CrfpgePmE/KJQFqVOw92UyfRaGt+fQAIGxPglayYSMiAGzorvEvie1sgbF15q5RCsaPlX+7nJmdrOPqGB7Qqg==",
   "success": true,
   "projectFilePath": "C:\\Programowanie\\MyProjects\\PathToWealth\\PathToWealthAPI\\PathToWealthAPI\\PathToWealthAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\neros\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\neros\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
+    "C:\\Users\\neros\\.nuget\\packages\\fluentvalidation\\11.5.1\\fluentvalidation.11.5.1.nupkg.sha512",
+    "C:\\Users\\neros\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.0\\fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
+    "C:\\Users\\neros\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.5.1\\fluentvalidation.dependencyinjectionextensions.11.5.1.nupkg.sha512",
     "C:\\Users\\neros\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\neros\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.0\\microsoft.aspnetcore.authentication.jwtbearer.8.0.0.nupkg.sha512",
     "C:\\Users\\neros\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.0\\microsoft.aspnetcore.openapi.8.0.0.nupkg.sha512",
