@@ -10,8 +10,8 @@ namespace PathToWealthAPI.Data
         {
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<JwtToken> JwtTokens { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<JwtToken> JwtToken { get; set; }
         public DbSet<UserFinancialData> UserFinancialData { get; set; }
 
     }

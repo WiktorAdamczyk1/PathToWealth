@@ -7,6 +7,7 @@ namespace PathToWealthAPI.Data
 
         public class User
         {
+            [Key]
             public int UserId { get; set; }
             [Required]
             public string Username { get; set; }
@@ -18,6 +19,7 @@ namespace PathToWealthAPI.Data
 
         public class JwtToken
         {
+            [Key]
             public int TokenId { get; set; }
             public int UserId { get; set; }
             [Required]
@@ -28,6 +30,7 @@ namespace PathToWealthAPI.Data
 
         public class UserFinancialData
         {
+            [Key]
             public int DataId { get; set; }
             public int UserId { get; set; }
             public int Age { get; set; }
@@ -42,6 +45,12 @@ namespace PathToWealthAPI.Data
             public decimal FutureSavingsGoal { get; set; }
             public int WithdrawalAge { get; set; }
             public decimal AnnualWithdrawalAmount { get; set; }
+        }
+
+        public class UserLogin
+        {
+            public string Username { get; set; }
+            public string Password { get; set; }
         }
 
     }
