@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using PathToWealthAPI;
 using PathToWealthAPI.Data;
+using PathToWealthAPI.Endpoints;
 using PathToWealthAPI.Extensions;
 using PathToWealthAPI.Services;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,10 +20,42 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+
+    // Define the BearerAuth security scheme
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below. Example: 'Bearer 12345abcdef'",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    // Use the BearerAuth security scheme globally
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header
+            },
+            new List<string>()
+        }
+    });
+});
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PathToWealthDbConnn")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PathToWealthDbConn")));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -37,16 +71,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
-
+builder.Services.AddAuthorization();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
-
 builder.Services.AddFluentValidationServices();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();
+builder.Services.AddScoped<IUserFinancialDataService, UserFinancialDataService>();
 
 var app = builder.Build();
 
@@ -59,48 +93,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapPost("/login", async (ApplicationDbContext db, Models.UserLogin userLogin, IPasswordHasher<User> passwordHasher, IUserService userService, ITokenService tokenService) =>
-{
-    User user = await userService.GetUser(userLogin.UsernameOrEmail);
+app.UseAuthentication();
+app.UseAuthorization();
 
-    if (user == null || !userService.VerifyPassword(user, userLogin.Password, passwordHasher))
-        return Results.Unauthorized();
-
-    var token = tokenService.GenerateToken(user);
-    return Results.Ok(new { token });
-}).WithName("Login")
-.WithOpenApi();
-
-
-app.MapPost("/register", async (UserRegistration registration, IPasswordHasher<User> passwordHasher, IValidator<UserRegistration> validator, IRegistrationService registrationService) =>
-{
-    // Validate the registration model
-    var validationResult = validator.Validate(registration);
-    if (!validationResult.IsValid)
-    {
-        return Results.ValidationProblem(validationResult.ToDictionary());
-    }
-
-    try
-    {
-        // Register the user
-        var user = await registrationService.RegisterUser(registration, passwordHasher);
-
-        // Exclude the password information from the response
-        var responseUser = new
-        {
-            user.UserId,
-            user.Username,
-            user.Email
-        };
-
-        return Results.Created($"/user/{user.UserId}", responseUser);
-    }
-    catch (Exception ex)
-    {
-        return Results.Conflict(ex.Message);
-    }
-}).WithName("Register");
+app.MapAuthenticationEndpoints();
+app.MapUserFinancialDataEndpoints();
 
 
 app.Run();

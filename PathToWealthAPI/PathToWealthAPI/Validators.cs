@@ -45,7 +45,7 @@ namespace PathToWealthAPI
     {
         public UserFinancialDataValidator()
         {
-            RuleFor(data => data.Age).InclusiveBetween(16, 100).WithMessage("Age must be between 18 and 100.");
+            RuleFor(data => data.Age).InclusiveBetween(16, 100).WithMessage("Age must be between 16 and 100.");
             RuleFor(data => data.InitialInvestment).GreaterThanOrEqualTo(0).WithMessage("Initial investment must be greater than or equal to 0.");
         }
     }

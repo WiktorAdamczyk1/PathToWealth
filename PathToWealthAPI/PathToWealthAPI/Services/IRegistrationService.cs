@@ -5,6 +5,6 @@ namespace PathToWealthAPI.Services
 {
     public interface IRegistrationService
     {
-        Task<User> RegisterUser(UserRegistration registration, IPasswordHasher<User> passwordHasher);
+        Task<User> RegisterUser(UserRegistration registration, IPasswordHasher<User> passwordHasher, UserFinancialData financialData = null);
     }
 }

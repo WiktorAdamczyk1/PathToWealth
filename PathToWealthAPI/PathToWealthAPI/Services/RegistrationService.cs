@@ -14,9 +14,8 @@ namespace PathToWealthAPI.Services
             _db = db;
         }
 
-        public async Task<User> RegisterUser(UserRegistration registration, IPasswordHasher<User> passwordHasher)
+        public async Task<User> RegisterUser(UserRegistration registration, IPasswordHasher<User> passwordHasher, UserFinancialData financialData = null)
         {
-            // Check if a user with the same username or email already exists
             var existingUser = await _db.User.FirstOrDefaultAsync(u => u.Username == registration.Username || u.Email == registration.Email);
             if (existingUser != null)
             {
@@ -31,11 +30,16 @@ namespace PathToWealthAPI.Services
                 PasswordHash = passwordHasher.HashPassword(null, registration.Password)
             };
 
-            // Add the new user to the database
             _db.User.Add(user);
+            await _db.SaveChangesAsync();
+
+            // If financial data is provided, use it; otherwise, create a new object with null values
+            var userFinancialData = financialData ?? new UserFinancialData { UserId = user.UserId };
+            _db.UserFinancialData.Add(userFinancialData);
             await _db.SaveChangesAsync();
 
             return user;
         }
+
     }
 }

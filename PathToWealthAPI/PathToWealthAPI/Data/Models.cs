@@ -35,7 +35,8 @@ namespace PathToWealthAPI.Data
             public int RetirementAge { get; set; }
             public decimal AnnualRetirementIncome { get; set; }
             public decimal FundBondRatio { get; set; }
-            public string PreferredFundsBonds { get; set; }
+            public string PreferredFunds{ get; set; }
+            public string PreferredBonds { get; set; }
             public int HistoricalInvestmentYear { get; set; }
             public decimal FutureSavingsGoal { get; set; }
             public int WithdrawalAge { get; set; }
