@@ -1,17 +1,14 @@
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using PathToWealthAPI;
 using PathToWealthAPI.Data;
 using PathToWealthAPI.Endpoints;
 using PathToWealthAPI.Extensions;
+using PathToWealthAPI.Middlewares;
 using PathToWealthAPI.Services;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
 using static PathToWealthAPI.Data.Models;
 
@@ -84,6 +81,8 @@ builder.Services.AddScoped<IUserFinancialDataService, UserFinancialDataService>(
 
 var app = builder.Build();
 
+app.UseMiddleware<GlobalErrorHandlingMiddleware>();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -98,6 +97,7 @@ app.UseAuthorization();
 
 app.MapAuthenticationEndpoints();
 app.MapUserFinancialDataEndpoints();
+
 
 
 app.Run();
