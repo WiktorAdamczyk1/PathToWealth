@@ -7,7 +7,6 @@ using Microsoft.OpenApi.Models;
 using PathToWealthAPI.Data;
 using PathToWealthAPI.Endpoints;
 using PathToWealthAPI.Extensions;
-using PathToWealthAPI.Middlewares;
 using PathToWealthAPI.Services;
 using System.Text;
 using static PathToWealthAPI.Data.Models;
@@ -74,6 +73,7 @@ builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddFluentValidationServices();
 
+builder.Services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();

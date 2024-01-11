@@ -8,9 +8,9 @@ namespace PathToWealthAPI.Services
 
     public class UserFinancialDataService : IUserFinancialDataService
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IApplicationDbContext _db;
 
-        public UserFinancialDataService(ApplicationDbContext db)
+        public UserFinancialDataService(IApplicationDbContext db)
         {
             _db = db;
         }

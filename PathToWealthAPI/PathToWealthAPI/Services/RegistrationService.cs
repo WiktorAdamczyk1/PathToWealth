@@ -7,9 +7,9 @@ namespace PathToWealthAPI.Services
 {
     public class RegistrationService : IRegistrationService
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IApplicationDbContext _db;
 
-        public RegistrationService(ApplicationDbContext db)
+        public RegistrationService(IApplicationDbContext db)
         {
             _db = db;
         }

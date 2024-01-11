@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathToWealthAPI", "PathToWealthAPI\PathToWealthAPI.csproj", "{40A5F885-5C77-4F11-9F82-58FDDA1EB123}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PathToWealthAPI", "PathToWealthAPI\PathToWealthAPI.csproj", "{40A5F885-5C77-4F11-9F82-58FDDA1EB123}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathToWealthAPI.Tests", "..\PathToWealthAPI.Tests\PathToWealthAPI.Tests.csproj", "{83BE82B8-FA77-497D-98A6-1D116442BD32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{40A5F885-5C77-4F11-9F82-58FDDA1EB123}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40A5F885-5C77-4F11-9F82-58FDDA1EB123}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40A5F885-5C77-4F11-9F82-58FDDA1EB123}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83BE82B8-FA77-497D-98A6-1D116442BD32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83BE82B8-FA77-497D-98A6-1D116442BD32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83BE82B8-FA77-497D-98A6-1D116442BD32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83BE82B8-FA77-497D-98A6-1D116442BD32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

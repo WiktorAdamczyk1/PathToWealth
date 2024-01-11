@@ -7,9 +7,9 @@ namespace PathToWealthAPI.Services
 {
     public class UserService : IUserService
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IApplicationDbContext _db;
 
-        public UserService(ApplicationDbContext db)
+        public UserService(IApplicationDbContext db, IPasswordHasher<User> @object)
         {
             _db = db;
         }
