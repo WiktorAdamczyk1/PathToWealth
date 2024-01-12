@@ -446,3 +446,5 @@ C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\bin\Deb
 C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\bin\Debug\net8.0\refs\System.Xml.XPath.dll
 C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\bin\Debug\net8.0\refs\System.Xml.XPath.XDocument.dll
 C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\bin\Debug\net8.0\refs\WindowsBase.dll
+C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\bin\Debug\net8.0\AspNetCoreRateLimit.dll
+C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\bin\Debug\net8.0\Newtonsoft.Json.dll
