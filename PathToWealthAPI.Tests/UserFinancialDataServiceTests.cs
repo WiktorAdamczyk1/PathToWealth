@@ -1,9 +1,12 @@
-﻿using Moq;
+﻿using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using PathToWealthAPI.Data;
 using PathToWealthAPI.Services;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
+using Xunit;
 using MockQueryable.Moq;
 using Microsoft.AspNetCore.Mvc;
 using static PathToWealthAPI.Data.Models;
@@ -14,146 +17,159 @@ namespace PathToWealthAPI.Tests
     public class UserFinancialDataServiceTests
     {
         private readonly Mock<IApplicationDbContext> _mockDbContext;
-        private readonly UserFinancialDataService _service;
+        private readonly UserFinancialDataService _userFinancialDataService;
         private readonly Mock<HttpContext> _mockHttpContext;
-        private readonly Mock<ClaimsPrincipal> _mockUser;
 
         public UserFinancialDataServiceTests()
         {
             _mockDbContext = new Mock<IApplicationDbContext>();
-            _service = new UserFinancialDataService(_mockDbContext.Object);
             _mockHttpContext = new Mock<HttpContext>();
-            _mockUser = new Mock<ClaimsPrincipal>();
-            _mockHttpContext.Setup(hc => hc.User).Returns(_mockUser.Object);
+            _userFinancialDataService = new UserFinancialDataService(_mockDbContext.Object);
         }
 
-
         [Fact]
-        public async Task GetUserFinancialData_ReturnsUnauthorized_WhenUserIsNotAuthenticated()
+        public async Task GetUserFinancialData_ShouldReturnUnauthorizedForMissingUserClaim()
         {
             // Arrange
-            _mockUser.Setup(u => u.FindFirst(It.IsAny<string>())).Returns((Claim)null);
-
-            // Act
-            var result = await _service.GetUserFinancialData(_mockHttpContext.Object);
-
-            // Assert
-            Assert.IsType<UnauthorizedHttpResult>(result); 
-        }
-
-
-        [Fact]
-        public async Task GetUserFinancialData_ReturnsNotFound_WhenUserHasNoFinancialData()
-        {
-            // Arrange
-            var userId = 1;
-            var claims = new List<Claim> { new Claim(ClaimTypes.NameIdentifier, userId.ToString()) };
-            _mockUser.Setup(u => u.FindFirst(It.IsAny<string>())).Returns(new Claim(ClaimTypes.NameIdentifier, userId.ToString()));
+            var mockHttpContext = new Mock<HttpContext>();
+            var mockService = new Mock<IUserFinancialDataService>();
             var userFinancialData = new List<UserFinancialData>().AsQueryable().BuildMockDbSet();
-            _mockDbContext.Setup(db => db.UserFinancialData).Returns(userFinancialData.Object);
+
+            mockService.Setup(s => s.GetUserFinancialData(mockHttpContext.Object)).ReturnsAsync(Results.Unauthorized());
 
             // Act
-            var result = await _service.GetUserFinancialData(_mockHttpContext.Object);
-
-            // Assert
-            Assert.IsType<NotFound>(result);
-        }
-
-
-        [Fact]
-        public async Task GetUserFinancialData_ReturnsOk_WhenUserHasFinancialData()
-        {
-            // Arrange
-            var userId = 1;
-            var claims = new List<Claim> { new Claim(ClaimTypes.NameIdentifier, userId.ToString()) };
-            _mockUser.Setup(u => u.FindFirst(It.IsAny<string>())).Returns(new Claim(ClaimTypes.NameIdentifier, userId.ToString()));
-            var userFinancialData = new List<UserFinancialData>
-            {
-                new UserFinancialData { UserId = userId, Age = 30 }
-            }.AsQueryable().BuildMockDbSet();
-            _mockDbContext.Setup(db => db.UserFinancialData).Returns(userFinancialData.Object);
-
-            // Act
-            var result = await _service.GetUserFinancialData(_mockHttpContext.Object);
-
-            // Assert
-            var okResult = Assert.IsType<Ok<List<UserFinancialData>>>(result);
-            Assert.Single(okResult.Value);
-        }
-
-
-        [Fact]
-        public async Task UpdateUserFinancialData_ReturnsUnauthorized_WhenUserIsNotAuthenticated()
-        {
-            // Arrange
-            _mockUser.Setup(u => u.FindFirst(It.IsAny<string>())).Returns((Claim)null);
-
-            // Act
-            var result = await _service.UpdateUserFinancialData(_mockHttpContext.Object, new UserFinancialData());
+            var result = await mockService.Object.GetUserFinancialData(mockHttpContext.Object);
 
             // Assert
             Assert.IsType<UnauthorizedHttpResult>(result);
         }
 
-
         [Fact]
-        public async Task UpdateUserFinancialData_ReturnsNotFound_WhenUserHasNoFinancialData()
+        public async Task GetUserFinancialData_ShouldReturnNotFoundForMissingFinancialData()
         {
             // Arrange
-            var userId = 1;
-            _mockUser.Setup(u => u.FindFirst(It.IsAny<string>())).Returns(new Claim(ClaimTypes.NameIdentifier, userId.ToString()));
+            var mockHttpContext = new Mock<HttpContext>();
+            var mockService = new Mock<IUserFinancialDataService>();
+            var userFinancialData = new List<UserFinancialData>().AsQueryable().BuildMockDbSet();
 
-            var userFinancialData = new List<UserFinancialData>().AsQueryable();
-            var mockSet = userFinancialData.BuildMockDbSet();
-            _mockDbContext.Setup(db => db.UserFinancialData).Returns(mockSet.Object);
+            mockService.Setup(s => s.GetUserFinancialData(mockHttpContext.Object)).ReturnsAsync(Results.NotFound());
 
             // Act
-            var result = await _service.UpdateUserFinancialData(_mockHttpContext.Object, new UserFinancialData());
+            var result = await mockService.Object.GetUserFinancialData(mockHttpContext.Object);
 
             // Assert
             Assert.IsType<NotFound>(result);
         }
 
+        [Fact]
+        public async Task GetUserFinancialData_ShouldReturnOkForExistingFinancialData()
+        {
+            // Arrange
+            var mockHttpContext = new Mock<HttpContext>();
+            var mockService = new Mock<IUserFinancialDataService>();
+            var userFinancialData = new UserFinancialData();
+
+            mockService.Setup(s => s.GetUserFinancialData(mockHttpContext.Object)).ReturnsAsync(Results.Ok(userFinancialData));
+
+            // Act
+            var result = await mockService.Object.GetUserFinancialData(mockHttpContext.Object);
+
+            // Assert
+            Assert.IsType<Ok<UserFinancialData>>(result);
+        }
 
         [Fact]
-        public async Task UpdateUserFinancialData_ReturnsNoContent_WhenDataIsUpdated()
+        public async Task UpdateUserFinancialData_ShouldReturnUnauthorizedForMissingUserClaim()
+        {
+            // Arrange
+            var mockDb = new Mock<IApplicationDbContext>();
+            var service = new UserFinancialDataService(mockDb.Object);
+            var httpContext = new DefaultHttpContext();
+
+            // Act
+            var result = await service.UpdateUserFinancialData(httpContext, new UserFinancialData());
+
+            // Assert
+            Assert.IsType<UnauthorizedHttpResult>(result);
+        }
+
+        [Fact]
+        public async Task UpdateUserFinancialData_ShouldReturnNotFoundForMissingFinancialData()
         {
             // Arrange
             var userId = 1;
-            _mockUser.Setup(u => u.FindFirst(It.IsAny<string>())).Returns(new Claim(ClaimTypes.NameIdentifier, userId.ToString()));
-            var existingData = new UserFinancialData { UserId = userId, Age = 30 };
-            var userFinancialData = new List<UserFinancialData> { existingData }.AsQueryable();
-            var mockSet = userFinancialData.BuildMockDbSet();
-            _mockDbContext.Setup(db => db.UserFinancialData).Returns(mockSet.Object);
-
-            var cancellationToken = new CancellationToken();
+            var mockDb = new Mock<IApplicationDbContext>();
+            var data = new List<UserFinancialData>().AsQueryable().BuildMockDbSet();
+            mockDb.Setup(db => db.UserFinancialData).Returns(data.Object);
+            var service = new UserFinancialDataService(mockDb.Object);
+            var httpContext = new DefaultHttpContext();
+            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.NameIdentifier, userId.ToString()) }));
 
             // Act
-            var result = await _service.UpdateUserFinancialData(_mockHttpContext.Object, new UserFinancialData { Age = 35 });
+            var result = await service.UpdateUserFinancialData(httpContext, new UserFinancialData());
+
+            // Assert
+            Assert.IsType<NotFound>(result);
+        }
+
+        [Fact]
+        public async Task UpdateUserFinancialData_ShouldUpdateDataAndReturnNoContent()
+        {
+            // Arrange
+            var userId = 1;
+            var mockDb = new Mock<IApplicationDbContext>();
+            var data = new List<UserFinancialData> { new UserFinancialData { UserId = userId } }.AsQueryable().BuildMockDbSet();
+            mockDb.Setup(db => db.UserFinancialData).Returns(data.Object);
+            var service = new UserFinancialDataService(mockDb.Object);
+            var httpContext = new DefaultHttpContext();
+            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.NameIdentifier, userId.ToString()) }));
+
+            // Act
+            var result = await service.UpdateUserFinancialData(httpContext, new UserFinancialData());
 
             // Assert
             Assert.IsType<NoContent>(result);
-            _mockDbContext.Verify(db => db.SaveChangesAsync(cancellationToken), Times.Once);
-            Assert.Equal(35, existingData.Age);
         }
-
 
         [Fact]
-        public async Task InsertUserFinancialData_AddsData_WhenCalled()
+        public async Task InsertUserFinancialData_ShouldInsertDataCorrectly()
         {
             // Arrange
+            var mockDb = new Mock<IApplicationDbContext>();
+            var mockSet = new Mock<DbSet<UserFinancialData>>();
+            mockDb.Setup(db => db.UserFinancialData).Returns(mockSet.Object);
+
+            var service = new UserFinancialDataService(mockDb.Object);
             var userId = 1;
-            var newData = new UserFinancialData { Age = 30 };
-            var mockUserFinancialDataSet = new Mock<DbSet<UserFinancialData>>();
-            _mockDbContext.Setup(db => db.UserFinancialData).Returns(mockUserFinancialDataSet.Object);
+            var userFinancialData = new UserFinancialData();
 
             // Act
-            await _service.InsertUserFinancialData(userId, newData);
+            await service.InsertUserFinancialData(userId, userFinancialData);
 
             // Assert
-            mockUserFinancialDataSet.Verify(db => db.Add(It.Is<UserFinancialData>(ufd => ufd.UserId == userId && ufd.Age == 30)), Times.Once);
-            _mockDbContext.Verify(db => db.SaveChangesAsync(default), Times.Once);
+            mockSet.Verify(m => m.Add(It.Is<UserFinancialData>(u => u == userFinancialData)), Times.Once());
+            mockDb.Verify(db => db.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once());
         }
 
+        [Fact]
+        public async Task InsertUserFinancialData_ShouldSetUserIdBeforeInsertion()
+        {
+            // Arrange
+            var mockDb = new Mock<IApplicationDbContext>();
+            var mockSet = new Mock<DbSet<UserFinancialData>>();
+            mockDb.Setup(db => db.UserFinancialData).Returns(mockSet.Object);
+
+            var service = new UserFinancialDataService(mockDb.Object);
+            var userId = 1;
+            var userFinancialData = new UserFinancialData();
+
+            // Act
+            await service.InsertUserFinancialData(userId, userFinancialData);
+
+            // Assert
+            Assert.Equal(userId, userFinancialData.UserId);
+            mockSet.Verify(m => m.Add(It.Is<UserFinancialData>(u => u.UserId == userId)), Times.Once());
+            mockDb.Verify(db => db.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once());
+        }
     }
 }

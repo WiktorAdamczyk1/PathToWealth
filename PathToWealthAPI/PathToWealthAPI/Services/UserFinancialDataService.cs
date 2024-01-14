@@ -33,7 +33,7 @@ namespace PathToWealthAPI.Services
             return Results.Ok(userFinancialData);
         }
 
-        public async Task<IResult> UpdateUserFinancialData(HttpContext httpContext, UserFinancialData updatedData)
+        public async Task<IResult> UpdateUserFinancialData(HttpContext httpContext, UserFinancialDataUpdate updatedData)
         {
             var userIdClaim = httpContext.User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
@@ -48,23 +48,23 @@ namespace PathToWealthAPI.Services
                 return Results.NotFound();
             }
 
-            userFinancialData.Age = updatedData.Age;
+            // Update the properties based on the new model structure
             userFinancialData.InitialInvestment = updatedData.InitialInvestment;
-            userFinancialData.AnnualIncome = updatedData.AnnualIncome;
-            userFinancialData.InvestmentPercentage = updatedData.InvestmentPercentage;
-            userFinancialData.RetirementAge = updatedData.RetirementAge;
-            userFinancialData.AnnualRetirementIncome = updatedData.AnnualRetirementIncome;
-            userFinancialData.FundBondRatio = updatedData.FundBondRatio;
-            userFinancialData.PreferredFunds = updatedData.PreferredFunds;
-            userFinancialData.PreferredBonds = updatedData.PreferredBonds;
-            userFinancialData.HistoricalInvestmentYear = updatedData.HistoricalInvestmentYear;
-            userFinancialData.FutureSavingsGoal = updatedData.FutureSavingsGoal;
-            userFinancialData.WithdrawalAge = updatedData.WithdrawalAge;
-            userFinancialData.AnnualWithdrawalAmount = updatedData.AnnualWithdrawalAmount;
+            userFinancialData.StartInvestementYear = updatedData.StartInvestementYear;
+            userFinancialData.StartWithdrawalYear = updatedData.StartWithdrawalYear;
+            userFinancialData.IsInvestmentMonthly = updatedData.IsInvestmentMonthly;
+            userFinancialData.YearlyOrMonthlySavings = updatedData.YearlyOrMonthlySavings;
+            userFinancialData.StockAnnualReturn = updatedData.StockAnnualReturn;
+            userFinancialData.StockCostRatio = updatedData.StockCostRatio;
+            userFinancialData.BondAnnualReturn = updatedData.BondAnnualReturn;
+            userFinancialData.BondCostRatio = updatedData.BondCostRatio;
+            userFinancialData.StockToBondRatio = updatedData.StockToBondRatio;
+            userFinancialData.RetirementDuration = updatedData.RetirementDuration;
 
             await _db.SaveChangesAsync();
             return Results.NoContent();
         }
+
 
         public async Task InsertUserFinancialData(int userId, UserFinancialData userFinancialData)
         {

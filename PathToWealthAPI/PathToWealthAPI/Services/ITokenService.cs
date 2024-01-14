@@ -4,6 +4,8 @@ namespace PathToWealthAPI.Services
 {
     public interface ITokenService
     {
-        string GenerateToken(User user);
+        Task<TokenResponse> GenerateTokens(User user);
+        Task<TokenResponse> RefreshJwtToken(string refreshToken);
+        Task RevokeRefreshToken(string refreshToken);
     }
 }

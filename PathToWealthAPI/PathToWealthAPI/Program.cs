@@ -15,6 +15,23 @@ using static PathToWealthAPI.Data.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddRateLimiter(options =>
+{
+    // General rate limit policy (4 request per second)
+    options.AddFixedWindowLimiter("GeneralLimit", policy =>
+    {
+        policy.PermitLimit = 4;
+        policy.Window = TimeSpan.FromSeconds(1);
+    });
+
+    // IP rate limit policy (1 request per 4 seconds)
+    options.AddFixedWindowLimiter("IpLimit", policy =>
+    {
+        policy.PermitLimit = 1;
+        policy.Window = TimeSpan.FromSeconds(4);
+    });
+});
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -55,11 +72,6 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PathToWealthDbConn")));
 
-builder.Services.AddMemoryCache();
-builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
-builder.Services.AddInMemoryRateLimiting();
-builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -88,6 +100,8 @@ builder.Services.AddScoped<IUserFinancialDataService, UserFinancialDataService>(
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
+
 app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
@@ -97,14 +111,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
-app.UseIpRateLimiting();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseRateLimiter();
+
 app.MapAuthenticationEndpoints();
 app.MapUserFinancialDataEndpoints();
+app.MapUserAccountEndpoints();
 
 app.Run();

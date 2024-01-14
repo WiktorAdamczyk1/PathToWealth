@@ -8,7 +8,7 @@ namespace PathToWealthAPI.Extensions
         {
             services.AddValidatorsFromAssemblyContaining<UserLoginValidator>();
             services.AddValidatorsFromAssemblyContaining<UserRegistrationValidator>();
-            services.AddValidatorsFromAssemblyContaining<JwtTokenValidator>();
+            services.AddValidatorsFromAssemblyContaining<RefreshTokenValidator>();
             services.AddValidatorsFromAssemblyContaining<UserFinancialDataValidator>();
 
             return services;

@@ -14,7 +14,7 @@ namespace PathToWealthAPI.Endpoints
             })
             .RequireAuthorization();
 
-            app.MapPut("/userfinancialdata", async (HttpContext httpContext, UserFinancialData updatedData, IUserFinancialDataService userFinancialDataService, IValidator<UserFinancialData> validator) =>
+            app.MapPut("/userfinancialdata", async (HttpContext httpContext, UserFinancialDataUpdate updatedData, IUserFinancialDataService userFinancialDataService, IValidator<UserFinancialDataUpdate> validator) =>
             {
                 var validationResult = validator.Validate(updatedData);
                 if (!validationResult.IsValid)
@@ -23,7 +23,8 @@ namespace PathToWealthAPI.Endpoints
                 }
                 return await userFinancialDataService.UpdateUserFinancialData(httpContext, updatedData);
             })
-            .RequireAuthorization();
+.           RequireAuthorization();
+
         }
     }
 }

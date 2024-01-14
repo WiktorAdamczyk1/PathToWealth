@@ -12,24 +12,22 @@ namespace PathToWealthAPI.Tests
         private readonly Mock<IApplicationDbContext> _mockDbContext;
         private readonly Mock<IPasswordHasher<User>> _mockPasswordHasher;
         private readonly RegistrationService _registrationService;
+        private readonly List<UserFinancialData> _userFinancialData;
 
         public RegistrationServiceTests()
         {
             _mockDbContext = new Mock<IApplicationDbContext>();
             _mockPasswordHasher = new Mock<IPasswordHasher<User>>();
             _registrationService = new RegistrationService(_mockDbContext.Object);
+            _userFinancialData = new List<UserFinancialData>();
 
-            // Create a list of users for mocking purposes
             var users = new List<User>().AsQueryable();
-            var userFinancialData = new List<UserFinancialData>().AsQueryable();
-
-            // Use BuildMockDbSet provided by MockQueryable.Moq
             var mockUserSet = users.BuildMockDbSet();
-            var mockFinancialDataSet = userFinancialData.BuildMockDbSet();
-
-            // Setup the mock context to return the mock set
             _mockDbContext.Setup(x => x.User).Returns(mockUserSet.Object);
+            var mockFinancialDataSet = _userFinancialData.AsQueryable().BuildMockDbSet();
             _mockDbContext.Setup(x => x.UserFinancialData).Returns(mockFinancialDataSet.Object);
+            _mockDbContext.Setup(x => x.UserFinancialData.Add(It.IsAny<UserFinancialData>()))
+                .Callback<UserFinancialData>(_userFinancialData.Add);
         }
 
         [Fact]
@@ -65,5 +63,41 @@ namespace PathToWealthAPI.Tests
             // Act & Assert
             await Assert.ThrowsAsync<Exception>(() => _registrationService.RegisterUser(registration, _mockPasswordHasher.Object));
         }
+
+        [Fact]
+        public async Task RegisterUser_ShouldCreateDefaultFinancialData_WhenNoFinancialDataProvided()
+        {
+            // Arrange
+            var registration = new UserRegistration { Username = "test", Email = "test@test.com", Password = "password" };
+            var hashedPassword = "hashedPassword";
+            _mockPasswordHasher.Setup(x => x.HashPassword(null, registration.Password)).Returns(hashedPassword);
+
+            // Act
+            var result = await _registrationService.RegisterUser(registration, _mockPasswordHasher.Object);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(registration.Username, result.Username);
+            Assert.Equal(registration.Email, result.Email);
+            Assert.Equal(hashedPassword, result.PasswordHash);
+
+            // Assert that a UserFinancialData object was created
+            var financialData = _userFinancialData.FirstOrDefault(x => x.UserId == result.UserId);
+            Assert.NotNull(financialData);
+
+            // Assert that the UserFinancialData object has the expected default values
+            Assert.Equal(10000, financialData.InitialInvestment);
+            Assert.Equal(DateTime.UtcNow.Year, financialData.StartInvestementYear);
+            Assert.Equal(DateTime.UtcNow.Year + 30, financialData.StartWithdrawalYear);
+            Assert.False(financialData.IsInvestmentMonthly);
+            Assert.Equal(12000, financialData.YearlyOrMonthlySavings);
+            Assert.Equal(7.90M, financialData.StockAnnualReturn);
+            Assert.Equal(0.04M, financialData.StockCostRatio);
+            Assert.Equal(3.30M, financialData.BondAnnualReturn);
+            Assert.Equal(0.05M, financialData.BondCostRatio);
+            Assert.Equal(100, financialData.StockToBondRatio);
+            Assert.Equal(30, financialData.RetirementDuration);
+        }
+
     }
 }
