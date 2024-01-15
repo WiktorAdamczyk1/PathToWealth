@@ -5,7 +5,9 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PathToWealthAPI", "PathToWealthAPI\PathToWealthAPI.csproj", "{40A5F885-5C77-4F11-9F82-58FDDA1EB123}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathToWealthAPI.Tests", "..\PathToWealthAPI.Tests\PathToWealthAPI.Tests.csproj", "{83BE82B8-FA77-497D-98A6-1D116442BD32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PathToWealthAPI.Tests", "..\PathToWealthAPI.Tests\PathToWealthAPI.Tests.csproj", "{83BE82B8-FA77-497D-98A6-1D116442BD32}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "pathtowealthclient", "..\PathToWealthClient\pathtowealthclient.esproj", "{EE7E9ADD-8309-467B-892B-62D55B6CB33D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,12 @@ Global
 		{83BE82B8-FA77-497D-98A6-1D116442BD32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83BE82B8-FA77-497D-98A6-1D116442BD32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83BE82B8-FA77-497D-98A6-1D116442BD32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE7E9ADD-8309-467B-892B-62D55B6CB33D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE7E9ADD-8309-467B-892B-62D55B6CB33D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE7E9ADD-8309-467B-892B-62D55B6CB33D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{EE7E9ADD-8309-467B-892B-62D55B6CB33D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE7E9ADD-8309-467B-892B-62D55B6CB33D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE7E9ADD-8309-467B-892B-62D55B6CB33D}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

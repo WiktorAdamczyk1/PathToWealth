@@ -87,7 +87,7 @@ namespace PathToWealthAPI.Tests
             var httpContext = new DefaultHttpContext();
 
             // Act
-            var result = await service.UpdateUserFinancialData(httpContext, new UserFinancialData());
+            var result = await service.UpdateUserFinancialData(httpContext, new UserFinancialDataUpdate());
 
             // Assert
             Assert.IsType<UnauthorizedHttpResult>(result);
@@ -106,7 +106,7 @@ namespace PathToWealthAPI.Tests
             httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.NameIdentifier, userId.ToString()) }));
 
             // Act
-            var result = await service.UpdateUserFinancialData(httpContext, new UserFinancialData());
+            var result = await service.UpdateUserFinancialData(httpContext, new UserFinancialDataUpdate());
 
             // Assert
             Assert.IsType<NotFound>(result);
@@ -125,7 +125,7 @@ namespace PathToWealthAPI.Tests
             httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.NameIdentifier, userId.ToString()) }));
 
             // Act
-            var result = await service.UpdateUserFinancialData(httpContext, new UserFinancialData());
+            var result = await service.UpdateUserFinancialData(httpContext, new UserFinancialDataUpdate());
 
             // Assert
             Assert.IsType<NoContent>(result);

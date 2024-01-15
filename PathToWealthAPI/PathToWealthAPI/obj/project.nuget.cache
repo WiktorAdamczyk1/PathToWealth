@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "VH+5I0BJReFF3FhOniaSZtEzD+iwV0DRJXEAJWbaT+eCabCHGb+O6C9TK3po2ozPTrXR9CF5m5cDLTXo5FnobQ==",
+  "dgSpecHash": "rW2hNlQ6n/HCNDETODPt6xT1Rxx0cb4Hy7VlFREME8gkRVO7HEXWIH8YLdzI6Nl7+DAMEgGQa53y0ORACEJ+lA==",
   "success": true,
   "projectFilePath": "C:\\Programowanie\\MyProjects\\PathToWealth\\PathToWealthAPI\\PathToWealthAPI\\PathToWealthAPI.csproj",
   "expectedPackageFiles": [
@@ -14,6 +14,7 @@
     "C:\\Users\\neros\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\neros\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.0\\microsoft.aspnetcore.authentication.jwtbearer.8.0.0.nupkg.sha512",
     "C:\\Users\\neros\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.0\\microsoft.aspnetcore.openapi.8.0.0.nupkg.sha512",
+    "C:\\Users\\neros\\.nuget\\packages\\microsoft.aspnetcore.spaproxy\\8.0.1\\microsoft.aspnetcore.spaproxy.8.0.1.nupkg.sha512",
     "C:\\Users\\neros\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "C:\\Users\\neros\\.nuget\\packages\\microsoft.codeanalysis.analyzers\\3.3.3\\microsoft.codeanalysis.analyzers.3.3.3.nupkg.sha512",
     "C:\\Users\\neros\\.nuget\\packages\\microsoft.codeanalysis.common\\4.5.0\\microsoft.codeanalysis.common.4.5.0.nupkg.sha512",

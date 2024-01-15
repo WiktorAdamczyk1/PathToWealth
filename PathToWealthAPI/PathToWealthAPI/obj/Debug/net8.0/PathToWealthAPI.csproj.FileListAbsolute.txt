@@ -448,3 +448,6 @@ C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\bin\Deb
 C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\bin\Debug\net8.0\refs\WindowsBase.dll
 C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\bin\Debug\net8.0\AspNetCoreRateLimit.dll
 C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\bin\Debug\net8.0\spa.proxy.json
+C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\bin\Debug\net8.0\Microsoft.AspNetCore.SpaProxy.dll
+C:\Programowanie\MyProjects\PathToWealth\PathToWealthAPI\PathToWealthAPI\obj\Debug\net8.0\spa.proxy.json

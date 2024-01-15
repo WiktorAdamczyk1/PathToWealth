@@ -7,6 +7,9 @@
     <InvariantGlobalization>false</InvariantGlobalization>
     <UserSecretsId>48c189d5-c98f-48ad-a077-71b733978987</UserSecretsId>
     <PreserveCompilationContext>true</PreserveCompilationContext>
+    <SpaRoot>..\..\pathtowealthclient</SpaRoot>
+    <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
+    <SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +25,16 @@
     </PackageReference>
     <PackageReference Include="MockQueryable.Moq" Version="7.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
+      <Version>8.*-*</Version>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\pathtowealthclient\pathtowealthclient.esproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
