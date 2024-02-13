@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PathToWealthAPI.Data
 {
@@ -30,10 +31,12 @@ namespace PathToWealthAPI.Data
         public class UserFinancialData
         {
             [Key]
+            [JsonIgnore]
             public int DataId { get; set; }
+            [JsonIgnore]
             public int UserId { get; set; }
             public decimal InitialInvestment { get; set; } = 10000;
-            public int StartInvestementYear { get; set; } = DateTime.UtcNow.Year;
+            public int StartInvestmentYear { get; set; } = DateTime.UtcNow.Year;
             public int StartWithdrawalYear { get; set; } = DateTime.UtcNow.Year + 30;
             public bool IsInvestmentMonthly { get; set; } = false; // False indicates yearly
             public decimal YearlyOrMonthlySavings { get; set; } = 12000;
@@ -41,8 +44,11 @@ namespace PathToWealthAPI.Data
             public decimal StockCostRatio { get; set; } = 0.04M;
             public decimal BondAnnualReturn { get; set; } = 3.30M;
             public decimal BondCostRatio { get; set; } = 0.05M;
-            public decimal StockToBondRatio { get; set; } = 100; // 100 indicates investement only in stocks fund
+            public decimal StockToBondRatio { get; set; } = 100; // 100 indicates investment only in stocks fund
             public int RetirementDuration { get; set; } = 30;
+            public decimal InflationRate { get; set; } = 2.50M;
+            public decimal WithdrawalRate { get; set; } = 4.00M;
+            [JsonIgnore]
             public User User { get; set; }
         }
 
@@ -64,21 +70,6 @@ namespace PathToWealthAPI.Data
         {
             public string CurrentPassword { get; set; }
             public string NewPassword { get; set; }
-        }
-
-        public class UserFinancialDataUpdate
-        {
-            public decimal InitialInvestment { get; set; }
-            public int StartInvestementYear { get; set; }
-            public int StartWithdrawalYear { get; set; }
-            public bool IsInvestmentMonthly { get; set; }
-            public decimal YearlyOrMonthlySavings { get; set; }
-            public decimal StockAnnualReturn { get; set; }
-            public decimal StockCostRatio { get; set; }
-            public decimal BondAnnualReturn { get; set; }
-            public decimal BondCostRatio { get; set; }
-            public decimal StockToBondRatio { get; set; }
-            public int RetirementDuration { get; set; }
         }
 
     }

@@ -55,8 +55,8 @@ namespace PathToWealthAPI
         public UserFinancialDataValidator()
         {
             RuleFor(data => data.InitialInvestment).GreaterThanOrEqualTo(0).WithMessage("Initial investment must be greater than or equal to 0.");
-            RuleFor(data => data.StartInvestementYear).InclusiveBetween(2000, 2200).WithMessage("Start investment year must be between 2000 and 2200.");
-            RuleFor(data => data.StartWithdrawalYear).GreaterThan(data => data.StartInvestementYear).WithMessage("Withdrawal start year must be greater than start investment year.")
+            RuleFor(data => data.StartInvestmentYear).InclusiveBetween(2000, 2200).WithMessage("Start investment year must be between 2000 and 2200.");
+            RuleFor(data => data.StartWithdrawalYear).GreaterThan(data => data.StartInvestmentYear).WithMessage("Withdrawal start year must be greater than start investment year.")
                 .InclusiveBetween(2001, 2230).WithMessage("Withdrawal start year must be between 2001 and 2230.");
             RuleFor(data => data.YearlyOrMonthlySavings).GreaterThanOrEqualTo(0).WithMessage("Yearly or monthly savings must be greater than or equal to 0.");
             RuleFor(data => data.StockAnnualReturn).InclusiveBetween(0.01M, 200M).WithMessage("Stock annual return must be between 0.01 and 200.");
@@ -65,27 +65,10 @@ namespace PathToWealthAPI
             RuleFor(data => data.BondCostRatio).InclusiveBetween(0.01M, 100M).WithMessage("Bond cost ratio must be between 0.01 and 100.");
             RuleFor(data => data.StockToBondRatio).InclusiveBetween(0, 100).WithMessage("Stock to bond ratio must be between 0 and 100.");
             RuleFor(data => data.RetirementDuration).InclusiveBetween(1, 100).WithMessage("Retirement duration must be between 1 and 100 years.");
+            RuleFor(data => data.InflationRate).InclusiveBetween(0.01M, 100M).WithMessage("Inflation rate must be between 0.01 and 100.");
+            RuleFor(data => data.WithdrawalRate).InclusiveBetween(0.01M, 100M).WithMessage("Withdrawal rate must be between 0.01 and 100.");
         }
     }
-
-    public class UserFinancialDataUpdateDtoValidator : AbstractValidator<UserFinancialDataUpdate>
-    {
-        public UserFinancialDataUpdateDtoValidator()
-        {
-            RuleFor(data => data.InitialInvestment).GreaterThanOrEqualTo(0).WithMessage("Initial investment must be greater than or equal to 0.");
-            RuleFor(data => data.StartInvestementYear).InclusiveBetween(2000, 2200).WithMessage("Start investment year must be between 2000 and 2200.");
-            RuleFor(data => data.StartWithdrawalYear).GreaterThan(data => data.StartInvestementYear).WithMessage("Withdrawal start year must be greater than start investment year.")
-                .InclusiveBetween(2001, 2230).WithMessage("Withdrawal start year must be between 2001 and 2230.");
-            RuleFor(data => data.YearlyOrMonthlySavings).GreaterThanOrEqualTo(0).WithMessage("Yearly or monthly savings must be greater than or equal to 0.");
-            RuleFor(data => data.StockAnnualReturn).InclusiveBetween(0.01M, 200M).WithMessage("Stock annual return must be between 0.01 and 200.");
-            RuleFor(data => data.StockCostRatio).InclusiveBetween(0.01M, 100M).WithMessage("Stock cost ratio must be between 0.01 and 100.");
-            RuleFor(data => data.BondAnnualReturn).InclusiveBetween(0.01M, 200M).WithMessage("Bond annual return must be between 0.01 and 200.");
-            RuleFor(data => data.BondCostRatio).InclusiveBetween(0.01M, 100M).WithMessage("Bond cost ratio must be between 0.01 and 100.");
-            RuleFor(data => data.StockToBondRatio).InclusiveBetween(0, 100).WithMessage("Stock to bond ratio must be between 0 and 100.");
-            RuleFor(data => data.RetirementDuration).InclusiveBetween(1, 100).WithMessage("Retirement duration must be between 1 and 100 years.");
-        }
-    }
-
 
     public class ChangePasswordValidator : AbstractValidator<UserPasswordChange>
     {

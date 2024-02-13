@@ -24,8 +24,8 @@ namespace PathToWealthAPI.Services
             }
             var userId = int.Parse(userIdClaim.Value);
 
-            var userFinancialData = await _db.UserFinancialData.Where(u => u.UserId == userId).ToListAsync();
-            if (userFinancialData == null || !userFinancialData.Any())
+            var userFinancialData = await _db.UserFinancialData.FirstOrDefaultAsync(u => u.UserId == userId);
+            if (userFinancialData == null)
             {
                 return Results.NotFound();
             }
@@ -33,7 +33,7 @@ namespace PathToWealthAPI.Services
             return Results.Ok(userFinancialData);
         }
 
-        public async Task<IResult> UpdateUserFinancialData(HttpContext httpContext, UserFinancialDataUpdate updatedData)
+        public async Task<IResult> UpdateUserFinancialData(HttpContext httpContext, UserFinancialData updatedData)
         {
             var userIdClaim = httpContext.User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
@@ -50,7 +50,7 @@ namespace PathToWealthAPI.Services
 
             // Update the properties based on the new model structure
             userFinancialData.InitialInvestment = updatedData.InitialInvestment;
-            userFinancialData.StartInvestementYear = updatedData.StartInvestementYear;
+            userFinancialData.StartInvestmentYear = updatedData.StartInvestmentYear;
             userFinancialData.StartWithdrawalYear = updatedData.StartWithdrawalYear;
             userFinancialData.IsInvestmentMonthly = updatedData.IsInvestmentMonthly;
             userFinancialData.YearlyOrMonthlySavings = updatedData.YearlyOrMonthlySavings;
@@ -60,6 +60,8 @@ namespace PathToWealthAPI.Services
             userFinancialData.BondCostRatio = updatedData.BondCostRatio;
             userFinancialData.StockToBondRatio = updatedData.StockToBondRatio;
             userFinancialData.RetirementDuration = updatedData.RetirementDuration;
+            userFinancialData.InflationRate = updatedData.InflationRate;
+            userFinancialData.WithdrawalRate = updatedData.WithdrawalRate;
 
             await _db.SaveChangesAsync();
             return Results.NoContent();

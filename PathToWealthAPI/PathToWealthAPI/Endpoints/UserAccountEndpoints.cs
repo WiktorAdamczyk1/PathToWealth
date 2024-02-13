@@ -44,7 +44,7 @@ namespace PathToWealthAPI.Endpoints
                     return Results.Problem("Could not retreive the userID from JWT token", statusCode: 401);
                 }
                 var userId = int.Parse(userIdClaim.Value);
-                Console.WriteLine(userId);
+
                 // Verify the current password
                 User user = await userService.GetUser(userId);
                 if (user == null || !userService.VerifyPassword(user, userPasswordChange.CurrentPassword, passwordHasher))
@@ -57,6 +57,31 @@ namespace PathToWealthAPI.Endpoints
 
                 return Results.Ok(new { message = "Password changed successfully" });
             }).WithName("ChangePassword")
+            .RequireRateLimiting("GeneralLimit")
+            .RequireAuthorization();
+
+            app.MapGet("/get-user", async (HttpContext httpContext, IUserService userService) =>
+            {
+                // Get the user ID from the JWT token
+                var userIdClaim = httpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+                if (userIdClaim == null)
+                {
+                    return Results.Problem("Could not retreive the userID from JWT token", statusCode: 401);
+                }
+                var userId = int.Parse(userIdClaim.Value);
+
+                // Use the user service to retrieve the user details
+                var user = await userService.GetUser(userId);
+
+                if (user != null)
+                {
+                    return Results.Ok(user);
+                }
+                else
+                {
+                    return Results.NotFound("User not found.");
+                }
+            }).WithName("GetUser")
             .RequireRateLimiting("GeneralLimit")
             .RequireAuthorization();
         }

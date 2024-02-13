@@ -87,7 +87,7 @@ namespace PathToWealthAPI.Tests
 
             // Assert that the UserFinancialData object has the expected default values
             Assert.Equal(10000, financialData.InitialInvestment);
-            Assert.Equal(DateTime.UtcNow.Year, financialData.StartInvestementYear);
+            Assert.Equal(DateTime.UtcNow.Year, financialData.StartInvestmentYear);
             Assert.Equal(DateTime.UtcNow.Year + 30, financialData.StartWithdrawalYear);
             Assert.False(financialData.IsInvestmentMonthly);
             Assert.Equal(12000, financialData.YearlyOrMonthlySavings);

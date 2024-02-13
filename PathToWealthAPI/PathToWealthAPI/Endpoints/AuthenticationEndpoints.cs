@@ -3,7 +3,6 @@ using FluentValidation;
 using PathToWealthAPI.Services;
 using static PathToWealthAPI.Data.Models;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 
 namespace PathToWealthAPI.Endpoints
 {
@@ -20,7 +19,7 @@ namespace PathToWealthAPI.Endpoints
                 }
 
                 User user = await userService.GetUser(userLogin.UsernameOrEmail);
-
+                
                 if (user == null || !userService.VerifyPassword(user, userLogin.Password, passwordHasher))
                 {
                     return Results.Problem("Could not verify your current password", statusCode: 401);
@@ -33,19 +32,21 @@ namespace PathToWealthAPI.Endpoints
                 {
                     HttpOnly = true,
                     Secure = true,
-                    SameSite = SameSiteMode.Strict
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddMinutes(15)
                 };
                 var refreshTokenCookieOptions = new CookieOptions
                 {
                     HttpOnly = true,
                     Secure = true,
-                    SameSite = SameSiteMode.Strict
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddDays(7) // Set the cookie to expire in 15 minutes
                 };
 
                 httpContext.Response.Cookies.Append("jwt", tokens.JwtToken, jwtCookieOptions);
                 httpContext.Response.Cookies.Append("refreshToken", tokens.RefreshToken, refreshTokenCookieOptions);
 
-                return Results.Ok(new { message = "Authentication successful" });
+                return Results.Ok(new { message = "Authentication successful", username = user.Username, email = user.Email });
             }).WithName("Login")
             .RequireRateLimiting("GeneralLimit")
             .RequireRateLimiting("IpLimit");
@@ -88,7 +89,7 @@ namespace PathToWealthAPI.Endpoints
             app.MapPost("/refresh-token", async (HttpContext httpContext, ITokenService tokenService) =>
             {
                 // Read the refresh token from the request body or cookie
-                var refreshToken = httpContext.Request.Form["refreshToken"].ToString();
+                var refreshToken = httpContext.Request.Cookies["refreshToken"];
                 if (string.IsNullOrEmpty(refreshToken))
                 {
                     refreshToken = httpContext.Request.Cookies["refreshToken"];
@@ -108,13 +109,14 @@ namespace PathToWealthAPI.Endpoints
                     {
                         HttpOnly = true,
                         Secure = true,
-                        SameSite = SameSiteMode.Strict
+                        Expires = DateTime.UtcNow.AddMinutes(15)
                     };
                     var refreshTokenCookieOptions = new CookieOptions
                     {
                         HttpOnly = true,
                         Secure = true,
-                        SameSite = SameSiteMode.Strict
+                        SameSite = SameSiteMode.Strict,
+                        Expires = DateTime.UtcNow.AddDays(7)
                     };
 
                     httpContext.Response.Cookies.Append("jwt", tokens.JwtToken, jwtCookieOptions);
@@ -132,7 +134,7 @@ namespace PathToWealthAPI.Endpoints
             // Endpoint to revoke refresh token
             app.MapPost("/revoke-token", async (HttpContext httpContext, ITokenService tokenService) =>
             {
-                var refreshToken = httpContext.Request.Form["refreshToken"].ToString();
+                var refreshToken = httpContext.Request.Cookies["refreshToken"];
                 if (string.IsNullOrEmpty(refreshToken))
                 {
                     return Results.BadRequest("Refresh token is required.");

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using PathToWealthAPI.Data;
 using PathToWealthAPI.Services;
-using Xunit;
 using MockQueryable.Moq;
-using Microsoft.AspNetCore.Mvc;
 using static PathToWealthAPI.Data.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -17,14 +13,10 @@ namespace PathToWealthAPI.Tests
     public class UserFinancialDataServiceTests
     {
         private readonly Mock<IApplicationDbContext> _mockDbContext;
-        private readonly UserFinancialDataService _userFinancialDataService;
-        private readonly Mock<HttpContext> _mockHttpContext;
 
         public UserFinancialDataServiceTests()
         {
             _mockDbContext = new Mock<IApplicationDbContext>();
-            _mockHttpContext = new Mock<HttpContext>();
-            _userFinancialDataService = new UserFinancialDataService(_mockDbContext.Object);
         }
 
         [Fact]
@@ -87,7 +79,7 @@ namespace PathToWealthAPI.Tests
             var httpContext = new DefaultHttpContext();
 
             // Act
-            var result = await service.UpdateUserFinancialData(httpContext, new UserFinancialDataUpdate());
+            var result = await service.UpdateUserFinancialData(httpContext, new UserFinancialData());
 
             // Assert
             Assert.IsType<UnauthorizedHttpResult>(result);
@@ -106,7 +98,7 @@ namespace PathToWealthAPI.Tests
             httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.NameIdentifier, userId.ToString()) }));
 
             // Act
-            var result = await service.UpdateUserFinancialData(httpContext, new UserFinancialDataUpdate());
+            var result = await service.UpdateUserFinancialData(httpContext, new UserFinancialData());
 
             // Assert
             Assert.IsType<NotFound>(result);
@@ -125,7 +117,7 @@ namespace PathToWealthAPI.Tests
             httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.NameIdentifier, userId.ToString()) }));
 
             // Act
-            var result = await service.UpdateUserFinancialData(httpContext, new UserFinancialDataUpdate());
+            var result = await service.UpdateUserFinancialData(httpContext, new UserFinancialData());
 
             // Assert
             Assert.IsType<NoContent>(result);

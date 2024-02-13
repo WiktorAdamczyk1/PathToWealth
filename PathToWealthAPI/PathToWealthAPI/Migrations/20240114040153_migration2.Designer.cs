@@ -104,7 +104,7 @@ namespace PathToWealthAPI.Migrations
                     b.Property<int>("RetirementDuration")
                         .HasColumnType("int");
 
-                    b.Property<int>("StartInvestementYear")
+                    b.Property<int>("StartInvestmentYear")
                         .HasColumnType("int");
 
                     b.Property<int>("StartWithdrawalYear")

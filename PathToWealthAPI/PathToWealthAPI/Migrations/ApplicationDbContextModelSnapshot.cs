@@ -92,6 +92,9 @@ namespace PathToWealthAPI.Migrations
                     b.Property<decimal>("BondCostRatio")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<decimal>("InflationRate")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<decimal>("InitialInvestment")
                         .HasColumnType("decimal(18,2)");
 
@@ -101,7 +104,7 @@ namespace PathToWealthAPI.Migrations
                     b.Property<int>("RetirementDuration")
                         .HasColumnType("int");
 
-                    b.Property<int>("StartInvestementYear")
+                    b.Property<int>("StartInvestmentYear")
                         .HasColumnType("int");
 
                     b.Property<int>("StartWithdrawalYear")
@@ -118,6 +121,9 @@ namespace PathToWealthAPI.Migrations
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("WithdrawalRate")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("YearlyOrMonthlySavings")
                         .HasColumnType("decimal(18,2)");

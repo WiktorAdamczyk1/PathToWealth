@@ -34,7 +34,7 @@ namespace PathToWealthAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     InitialInvestment = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    StartInvestementYear = table.Column<int>(type: "int", nullable: false),
+                    StartInvestmentYear = table.Column<int>(type: "int", nullable: false),
                     StartWithdrawalYear = table.Column<int>(type: "int", nullable: false),
                     IsInvestmentMonthly = table.Column<bool>(type: "bit", nullable: false),
                     YearlyOrMonthlySavings = table.Column<decimal>(type: "decimal(18,2)", nullable: false),

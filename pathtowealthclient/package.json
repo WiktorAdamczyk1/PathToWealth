@@ -1,32 +1,38 @@
 {
-  "name": "pathtowealthclient",
-  "version": "0.0.0",
+  "name": "pathtowealth",
   "private": true,
-  "type": "module",
+  "version": "0.1.0",
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build": "vite build",
+    "generate": "vite-ssg build",
     "preview": "vite preview",
-    "build-only": "vite build",
-    "type-check": "vue-tsc --build --force",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+    "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "vue": "^3.3.11"
+    "@coders-tm/vue-number-format": "^3.34.1",
+    "apexcharts": "^3.45.2",
+    "chart.js": "^4.4.1",
+    "element-plus": "^2.5.2",
+    "jwt-decode": "^4.0.0",
+    "vue": "^3.3.4",
+    "vue-chartjs": "^5.3.0",
+    "vue-percent-input": "^1.1.4",
+    "vue-router": "^4.2.5",
+    "vue3-apexcharts": "^1.4.4",
+    "vue3-slide-up-down": "^2.0.1"
   },
   "devDependencies": {
-    "@rushstack/eslint-patch": "^1.3.3",
-    "@tsconfig/node18": "^18.2.2",
-    "@types/node": "^18.19.3",
-    "@vitejs/plugin-vue": "^4.5.2",
-    "@vue/eslint-config-typescript": "^12.0.0",
-    "@vue/tsconfig": "^0.5.0",
-    "eslint": "^8.56.0",
-    "eslint-plugin-vue": "^9.17.0",
-    "npm-run-all2": "^6.1.1",
-    "run-script-os": "^1.1.6",
-    "typescript": "~5.3.0",
-    "vite": "^5.0.10",
-    "vue-tsc": "^1.8.25"
-  }
+    "@iconify-json/ep": "^1.1.12",
+    "@types/node": "^20.6.0",
+    "@vitejs/plugin-vue": "^4.3.4",
+    "sass": "^1.66.1",
+    "typescript": "^5.2.2",
+    "unocss": "^0.55.7",
+    "unplugin-vue-components": "^0.25.2",
+    "vite": "^4.4.9",
+    "vite-ssg": "^0.23.1",
+    "vue-tsc": "^1.8.11"
+  },
+  "license": "MIT"
 }

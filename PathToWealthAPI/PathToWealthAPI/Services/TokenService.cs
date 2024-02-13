@@ -60,7 +60,7 @@ namespace PathToWealthAPI.Services
                     new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                     new Claim(ClaimTypes.Name, user.Username)
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(15), // Shorter expiry for JWT
+                Expires = DateTime.UtcNow.AddMinutes(1), // Shorter expiry for JWT
                 Issuer = _configuration["Jwt:Issuer"],
                 Audience = _configuration["Jwt:Audience"],
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
