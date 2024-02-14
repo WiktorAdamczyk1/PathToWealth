@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PathToWealthAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+61f05654e120e0f31518575ae5fdea9c77fcfa13")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eb19fcb53e7ef0bd27beddbbaea88f6489262383")]
 [assembly: System.Reflection.AssemblyProductAttribute("PathToWealthAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PathToWealthAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,0 +1,39 @@
+# fly.toml app configuration file generated for pathtowealthapi on 2024-02-14T02:40:50+01:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'pathtowealthapi'
+primary_region = 'waw'
+
+[build]
+  # Install the dotnet runtime
+  buildpacks = [
+    "urn:cnb:registry:paketo-buildpacks/dotnet-core-aspnet"
+  ]
+
+[env]
+  PORT = '7113'
+
+[http_service]
+  internal_port = 7113
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+  
+[[services.ports]]
+  handlers = ["tls", "http"]
+  port = 443
+	
+	
+[http_service.tls_options]
+  alpn = ["h2", "http/1.1"]
+  versions = ["TLSv1.2", "TLSv1.3"]
+  default_self_signed = false
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1

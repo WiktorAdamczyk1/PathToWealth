@@ -3,5 +3,8 @@
     "element-plus": "^2.5.1",
     "vue-router": "^4.2.5",
     "vuex": "^4.0.2"
+  },
+  "scripts": {
+    "start": "dotnet run"
   }
 }
