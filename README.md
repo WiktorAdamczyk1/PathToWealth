@@ -5,7 +5,7 @@
 ## Functionalities
 
 - Perform financial analysis without logging in.
-- Remember user information between sessions adn devices by registering an account.
+- Remember user information between sessions and devices by registering an account.
 - User authentication with JWT Tokens and HTTPCookies.
 - Customise the possible variables or use the default values based on the book.
 - Predict the amount of money you may withdraw yearly when following the 4% rule.
