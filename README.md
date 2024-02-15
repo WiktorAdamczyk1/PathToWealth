@@ -25,6 +25,7 @@
 ## Technologies
 
 * Backend: [.NET 8.0 ASP.NET Core Web API with Minimal API architecture](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api?view=aspnetcore-8.0&tabs=visual-studio)
+* Unit Tests: [xUnit](https://xunit.net/)
 * Frontend: [Vue3](https://vuejs.org/) with TypeScript
 * CSS: [Element Plus](https://element-plus.org/)
 * Database: [MS SQL Server](https://www.microsoft.com/en-us/sql-server/), [Entity Framework](https://learn.microsoft.com/en-us/ef/)
